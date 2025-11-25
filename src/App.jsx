@@ -1,10 +1,12 @@
 import "./App.css";
+import { BrowserRouter as Router } from "react-router-dom";
+import Rotas from "./routes/routes";
 
 function App() {
   return (
-    <>
-      <h1 class="text-3xl font-bold underline text-center">Hello world!</h1>
-    </>
+    <Router>
+      <Rotas />
+    </Router>
   );
 }
 

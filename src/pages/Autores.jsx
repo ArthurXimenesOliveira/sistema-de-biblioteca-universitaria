@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, Button, PageHeader, Card } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+function Autores(){
 
 const AuthorsPage = () => {
 
@@ -47,5 +48,5 @@ const AuthorsPage = () => {
     </>
   );
 };
-
+}
 export default Autores;

@@ -4,7 +4,10 @@ import { PlusOutlined } from "@ant-design/icons";
 import InnerLayout from "../components/InnerLayout";
 
 export default function Autores() {
-  const data = [];
+  const data = [
+    { id: 1, nome: "Autor 1", nacionalidade: "Brasileira", dataNascimento: "20/03/2001" },
+    { id: 2, nome: "Autor 2", nacionalidade: "Mexicana", dataNascimento: "20/02/2002" },
+  ];
   const columns = [
     { title: "Nome", dataIndex: "nome", key: "nome" },
     { title: "Nacionalidade", dataIndex: "nacionalidade", key: "nacionalidade" },

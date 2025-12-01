@@ -22,7 +22,11 @@ export default function Autores() {
       setData(Array.isArray(lista) ? lista : []);
     } catch (error) {
       console.error("Erro ao carregar autores:", error);
-      setData([]);
+      setData([
+        { id: 0, nome: "Autor exemplo", nacionalidade: "-", biografia: "-" },
+        { id: 1, nome: "Outro autor", nacionalidade: "-", biografia: "-" },
+        { id: 2, nome: "Terceiro autor", nacionalidade: "-", biografia: "-" },
+      ]);
       message.error("Erro ao carregar autores!");
     } finally {
       setLoading(false);
@@ -44,13 +48,15 @@ export default function Autores() {
     setIsModalOpen(false);
     setAutorSelecionado(null);
     setModoEdicao(false);
-    
+
     // Pequeno delay para garantir que o modal fechou antes de recarregar
     setTimeout(() => {
       carregarAutores();
     }, 100);
-    
-    message.success(modoEdicao ? "Autor atualizado com sucesso!" : "Autor criado com sucesso!");
+
+    message.success(
+      modoEdicao ? "Autor atualizado com sucesso!" : "Autor criado com sucesso!"
+    );
   };
 
   const handleCancel = () => {

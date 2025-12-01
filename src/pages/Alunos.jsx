@@ -99,11 +99,6 @@ export default function Alunos() {
       key: "nome",
     },
     {
-      title: "Nacionalidade",
-      dataIndex: "nacionalidade",
-      key: "nacionalidade",
-    },
-    {
       title: "Matricula",
       dataIndex: "matricula",
       key: "matricula",
@@ -116,6 +111,21 @@ export default function Alunos() {
             : "-"}
         </span>
       ),
+    },
+    {
+      title: "Curso",
+      dataIndex: "curso",
+      key: "curso",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Telefone",
+      dataIndex: "telefone",
+      key: "telefone",
     },
     {
       title: "Ações",

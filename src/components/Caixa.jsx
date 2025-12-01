@@ -1,7 +1,8 @@
 import { Modal, Form, Input, DatePicker, Select } from "antd";
 import Autores from "../objetos/Autores.mjs";
 import AutoresDAO from "../daos/AutoresDAO.mjs";
-import dayjs from "dayjs";
+import Aluno from "../objetos/Aluno.mjs";
+import AlunosDAO from "../daos/AlunosDAO.mjs";
 import React from "react";
 
 const { Option } = Select;
@@ -16,6 +17,13 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
 
     const autoresDAO = new AutoresDAO();
     autoresDAO.atualizarAutores(dados.id, values);
+  }
+  function editarAluno(values) {
+    console.log("Editar aluno chamado com dados:", values);
+    if (!dados) return;
+
+    const alunosDAO = new AlunosDAO();
+    alunosDAO.atualizarAluno(dados.id, values);
   }
   React.useEffect(() => {
     if (dados && tipo === 1) {
@@ -34,7 +42,7 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
       });
     } else if (dados && tipo === 3) {
       form.setFieldsValue({
-        nomeAluno: dados.nomeAluno,
+        nomeAluno: dados.nome,
         matricula: dados.matricula,
         curso: dados.curso,
         email: dados.email,
@@ -70,10 +78,23 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
         autoresDAO.salvarAutores(novoAutor);
       }
     }
+    if (tipo === 3) {
+      if (dados) {
+        editarAluno(values);
+      } else {
+        const novoAluno = new Aluno();
+
+        novoAluno.setNome(values.nomeAluno);
+        novoAluno.setCurso(values.curso);
+        novoAluno.setEmail(values.email);
+        novoAluno.setTelefone(values.telefone);
+        const alunosDAO = new AlunosDAO();
+        alunosDAO.salvarAluno(novoAluno);
+      }
+    }
 
     handleOk();
   };
-
 
   const handleModalOk = () => {
     form.submit(); // Isso irá chamar onFinish
@@ -209,15 +230,30 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
           >
             <Input placeholder="Digite o nome completo do aluno" />
           </Form.Item>
-
           <Form.Item
-            label="Matrícula"
-            name="matricula"
+            label="E-mail"
+            name="email"
             rules={[
-              { required: true, message: "Por favor, insira a matrícula!" },
+              {
+                required: true,
+                message: "Por favor, insira o e-mail do aluno!",
+              },
+              { type: "email", message: "Por favor, insira um e-mail válido!" },
             ]}
           >
-            <Input placeholder="Ex: 202300123" />
+            <Input placeholder="Digite o e-mail do aluno" />
+          </Form.Item>
+          <Form.Item
+            label="Telefone"
+            name="telefone"
+            rules={[
+              {
+                required: true,
+                message: "Por favor, insira o telefone do aluno!",
+              },
+            ]}
+          >
+            <Input placeholder="Digite o telefone do aluno" />
           </Form.Item>
 
           <Form.Item

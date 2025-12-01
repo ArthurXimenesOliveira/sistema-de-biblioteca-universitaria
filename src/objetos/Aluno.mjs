@@ -4,6 +4,8 @@ export default class Aluno extends Pessoa{
     #alunoId
     #matricula;
     #curso;
+    #email;
+    #telefone;
 
     setAlunoId(id) {
         this.#alunoId = id;
@@ -23,5 +25,17 @@ export default class Aluno extends Pessoa{
     }
     getCurso(){
         return this.#curso;
+    }
+    setEmail(email){
+        this.#email = email;
+    }
+    getEmail(){
+        return this.#email;
+    }
+    setTelefone(telefone){
+        this.#telefone = telefone;
+    }
+    getTelefone(){
+        return this.#telefone;
     }
 }

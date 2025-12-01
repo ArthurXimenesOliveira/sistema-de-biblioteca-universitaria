@@ -1,6 +1,7 @@
 import Pessoa from "./Pessoa.mjs";
 export default class Autores extends Pessoa {
   // Atributos
+  #autorId;
   #biografia;
   #dataFalecimento;
   #generosLiterarios;
@@ -8,6 +9,12 @@ export default class Autores extends Pessoa {
   #ativo;
 
   // Métodos
+  setAutorId(id) {
+    this.#autorId = id;
+  }
+  getAutorId() {
+    return this.#autorId;
+  }
 
   setBiografia(biografia) {
     this.#biografia = biografia;

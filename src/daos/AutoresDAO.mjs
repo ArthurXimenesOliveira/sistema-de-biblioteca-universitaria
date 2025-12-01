@@ -31,19 +31,19 @@ export default class AutoresDAO {
   }
 
   arrumarAutores(autoresJSON) {
+    console.log(autoresJSON);
     if (!autoresJSON) return null;
 
     return {
-      id: autoresJSON.id || this.gerarIdAutor(),
-      nome: autoresJSON.nome || "",
-      nacionalidade: autoresJSON.nacionalidade || "",
-      dataNascimento:
-        autoresJSON.dataNascimento || autoresJSON.nascimento || "",
-      biografia: autoresJSON.biografia || "",
+      id: autoresJSON.getAutorId() || this.gerarIdAutor(),
+      nome: autoresJSON.getNome() || "",
+      nacionalidade: autoresJSON.getNacionalidade()|| "",
+      biografia: autoresJSON.getBiografia() || "",
     };
   }
 
   async salvarAutores(autores) {
+    console.log(autores);
     try {
       const lista = await this.carregarAutores();
       const objeto = this.arrumarAutores(autores);

@@ -22,9 +22,6 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
       form.setFieldsValue({
         nome: dados.nome,
         nacionalidade: dados.nacionalidade,
-        dataNascimento: dados.dataNascimento
-          ? dayjs(dados.dataNascimento)
-          : null,
         biografia: dados.biografia,
       });
     } else if (dados && tipo === 2) {
@@ -49,6 +46,10 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
     }
   }, [dados, tipo, form]);
 
+  function gerarIdAutor() {
+    return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+  }
+
   const onFinish = (values) => {
     console.log("Dados do formulário:", values);
 
@@ -59,6 +60,9 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
       } else {
         // Modo criação - salvar novo autor
         const novoAutor = new Autores();
+        const autorId = gerarIdAutor();
+
+        novoAutor.setAutorId(autorId);
         novoAutor.setNome(values.nome);
         novoAutor.setNacionalidade(values.nacionalidade);
         novoAutor.setBiografia(values.biografia);
@@ -69,6 +73,7 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
 
     handleOk();
   };
+
 
   const handleModalOk = () => {
     form.submit(); // Isso irá chamar onFinish

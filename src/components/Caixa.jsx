@@ -7,6 +7,9 @@ import Livros from "../objetos/Livros.mjs";
 import LivrosDAO from "../daos/LivrosDAO.mjs";
 import Aluno from "../objetos/Aluno.mjs";
 import AlunosDAO from "../daos/AlunosDAO.mjs";
+import Emprestimo from "../objetos/Emprestimo.mjs";
+import EmprestimoDAO from "../daos/EmprestimoDAO.mjs";
+import CaixaSeletora from "./CaixaSeletora";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -14,6 +17,17 @@ const { TextArea } = Input;
 function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
   const [form] = Form.useForm();
   const [autores, setAutores] = React.useState([]);
+  const [alunos, setAlunos] = React.useState([]);
+  const [livros, setLivros] = React.useState([]);
+
+  async function buscarAlunos() {
+    const alunos = await new AlunosDAO().carregarAlunos();
+    return alunos || [];
+  }
+  async function buscarLivros() {
+    const livros = new LivrosDAO().carregarLivros();
+    return livros || [];
+  }
 
   // Carrega autores quando o modal abre para tipo === 2 (formulário de livro)
   React.useEffect(() => {
@@ -22,6 +36,13 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
       autoresDAO.carregarAutores().then((lista) => {
         // lista já é array de objetos salvos (id, nome, ...)
         setAutores(Array.isArray(lista) ? lista : []);
+      });
+    } else if (tipo === 4) {
+      buscarAlunos().then((lista) => {
+        setAlunos(Array.isArray(lista) ? lista : []);
+      });
+      buscarLivros().then((lista) => {
+        setLivros(Array.isArray(lista) ? lista : []);
       });
     }
   }, [tipo, isModalOpen]);
@@ -144,6 +165,12 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
           await alunosDAO.salvarAluno(novoAluno);
         }
       }
+      // EMPRÉSTIMO (tipo 4)
+      if (tipo === 4) {
+        const emprestimoDAO = new EmprestimoDAO();
+        console.log("Valores do formulário de empréstimo:", values);
+        emprestimoDAO.salvarEmprestimo(values);
+      }
 
       // fecha modal e reseta formulário
       form.resetFields();
@@ -158,17 +185,19 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
   };
 
   // título do modal condicional por tipo
-  const modalTitle = dados
-    ? tipo === 1
-      ? "Editar Autor"
-      : tipo === 2
-      ? "Editar Livro"
-      : "Editar Aluno"
-    : tipo === 1
-    ? "Cadastrar Autor"
-    : tipo === 2
-    ? "Cadastrar Livro"
-    : "Cadastrar Aluno";
+  const modalTitle = (() => {
+    if (dados) {
+      if (tipo === 1) return "Editar Autor";
+      if (tipo === 2) return "Editar Livro";
+      if (tipo === 3) return "Editar Aluno";
+    } else {
+      if (tipo === 1) return "Cadastrar Autor";
+      if (tipo === 2) return "Cadastrar Livro";
+      if (tipo === 3) return "Cadastrar Aluno";
+      if (tipo === 4) return "Registrar Empréstimo";
+    }
+    return "";
+  })();
 
   return (
     <Modal
@@ -185,11 +214,18 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
       destroyOnClose={true}
     >
       {tipo === 1 && (
-        <Form form={form} layout="vertical" name="autorForm" onFinish={onFinish}>
+        <Form
+          form={form}
+          layout="vertical"
+          name="autorForm"
+          onFinish={onFinish}
+        >
           <Form.Item
             label="Nome do Autor"
             name="nome"
-            rules={[{ required: true, message: "Por favor, insira o nome do autor!" }]}
+            rules={[
+              { required: true, message: "Por favor, insira o nome do autor!" },
+            ]}
           >
             <Input placeholder="Digite o nome completo do autor" />
           </Form.Item>
@@ -197,7 +233,9 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
           <Form.Item
             label="Nacionalidade"
             name="nacionalidade"
-            rules={[{ required: true, message: "Por favor, insira a nacionalidade!" }]}
+            rules={[
+              { required: true, message: "Por favor, insira a nacionalidade!" },
+            ]}
           >
             <Input placeholder="Ex: Brasileiro, Americano, etc." />
           </Form.Item>
@@ -209,11 +247,21 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
       )}
 
       {tipo === 2 && (
-        <Form form={form} layout="vertical" name="livroForm" onFinish={onFinish}>
+        <Form
+          form={form}
+          layout="vertical"
+          name="livroForm"
+          onFinish={onFinish}
+        >
           <Form.Item
             label="Título do Livro"
             name="titulo"
-            rules={[{ required: true, message: "Por favor, insira o título do livro!" }]}
+            rules={[
+              {
+                required: true,
+                message: "Por favor, insira o título do livro!",
+              },
+            ]}
           >
             <Input placeholder="Digite o título do livro" />
           </Form.Item>
@@ -223,7 +271,12 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
           <Form.Item
             label="Ano de Publicação"
             name="ano"
-            rules={[{ required: true, message: "Por favor, insira o ano de publicação!" }]}
+            rules={[
+              {
+                required: true,
+                message: "Por favor, insira o ano de publicação!",
+              },
+            ]}
           >
             <Input type="number" placeholder="Ex: 2020" />
           </Form.Item>
@@ -231,7 +284,9 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
           <Form.Item
             label="Categoria"
             name="categoria"
-            rules={[{ required: true, message: "Por favor, selecione a categoria!" }]}
+            rules={[
+              { required: true, message: "Por favor, selecione a categoria!" },
+            ]}
           >
             <Select placeholder="Selecione uma categoria">
               <Option value="Computação">Computação</Option>
@@ -246,7 +301,9 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
           <Form.Item
             label="Autor"
             name="autorId"
-            rules={[{ required: true, message: "Por favor, selecione o autor!" }]}
+            rules={[
+              { required: true, message: "Por favor, selecione o autor!" },
+            ]}
           >
             <Select placeholder="Selecione o autor">
               {autores.length === 0 ? (
@@ -266,19 +323,23 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
       )}
 
       {tipo === 3 && (
-        <Form form={form} layout="vertical" name="alunoForm" onFinish={onFinish}>
+        <Form
+          form={form}
+          layout="vertical"
+          name="alunoForm"
+          onFinish={onFinish}
+        >
           <Form.Item
             label="Nome do Aluno"
             name="nomeAluno"
-            rules={[{ required: true, message: "Por favor, insira o nome do aluno!" }]}
+            rules={[
+              { required: true, message: "Por favor, insira o nome do aluno!" },
+            ]}
           >
             <Input placeholder="Digite o nome completo do aluno" />
           </Form.Item>
 
-          <Form.Item
-            label="Matrícula"
-            name="matricula"
-          >
+          <Form.Item label="Matrícula" name="matricula">
             <Input placeholder="Número de matrícula" />
           </Form.Item>
 
@@ -288,7 +349,9 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
             rules={[{ required: true, message: "Por favor, insira o curso!" }]}
           >
             <Select placeholder="Selecione o curso">
-              <Option value="Engenharia da Computação">Engenharia da Computação</Option>
+              <Option value="Engenharia da Computação">
+                Engenharia da Computação
+              </Option>
               <Option value="Direito">Direito</Option>
               <Option value="Medicina">Medicina</Option>
               <Option value="Administração">Administração</Option>
@@ -301,7 +364,10 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
             label="E-mail"
             name="email"
             rules={[
-              { required: true, message: "Por favor, insira o e-mail do aluno!" },
+              {
+                required: true,
+                message: "Por favor, insira o e-mail do aluno!",
+              },
               { type: "email", message: "Por favor, insira um e-mail válido!" },
             ]}
           >
@@ -310,6 +376,46 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
 
           <Form.Item label="Telefone" name="telefone">
             <Input placeholder="(00) 00000-0000" />
+          </Form.Item>
+        </Form>
+      )}
+      {/*Empréstimo*/}
+      {tipo === 4 && (
+        <Form
+          form={form}
+          layout="vertical"
+          name="emprestimoForm"
+          onFinish={onFinish}
+        >
+          <Form.Item
+            label="Alunos"
+            name="alunosSelecionados"
+            rules={[
+              { required: true, message: "Por favor, selecione um aluno" },
+            ]}
+          >
+            <CaixaSeletora
+              options={alunos.map((aluno) => ({
+                label: aluno.nome,
+                value: aluno.id,
+              }))}
+              placeholder="Selecione um aluno"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Livros"
+            name="livrosSelecionados"
+            rules={[
+              { required: true, message: "Por favor, selecione um livro" },
+            ]}
+          >
+            <CaixaSeletora
+              options={livros.map((livros) => ({
+                label: livros.titulo,
+                value: livros.id,
+              }))}
+              placeholder="Selecione um livro"
+            />
           </Form.Item>
         </Form>
       )}

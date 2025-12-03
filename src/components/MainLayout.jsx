@@ -6,8 +6,7 @@ import {
   MenuOutlined,
   ReadOutlined,
   TeamOutlined,
-  BarChartOutlined,
-  UserOutlined
+  BarChartOutlined
 } from "@ant-design/icons";
 
 
@@ -33,31 +32,31 @@ const MainLayout = () => {
   const mainMenuItems = [
     {
       key: "1",
-      label: <Link to="/livros"><ReadOutlined /> Livros</Link>,
+      label: <Link to="/livros" style={{ color: "white" }} ><ReadOutlined /> Livros</Link>,
     },
     {
       key: "2",
-      label: <Link to="/autores"> <TeamOutlined /> Autores</Link>,
+      label: <Link to="/autores" style={{ color: "white" }}> <TeamOutlined /> Autores</Link>,
     },
     {
       key: "3",
-      label: <Link to="/alunos"><UserOutlined />Alunos</Link>,
+      label: <Link to="/alunos" style={{ color: "white" }}>Alunos</Link>,
     },
     {
       key: "4",
-      label: <Link to="/relatorios"> <BarChartOutlined /> Relatórios</Link>,
+      label: <Link to="/relatorios" style={{ color: "white" }}> <BarChartOutlined /> Relatórios</Link>,
     },
   ];
 
 
   return (
-    <Layout style={{ minHeight: "100vh", overflowX: "hidden" }}>
+    <Layout style={{ minHeight: "100vh", overflowX: "hidden", color: "white" }}>
       <Header
         style={{
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "white",
-          color: "black",
+          backgroundColor: "#1d3973",
+          color: "white",
           height: "auto",
         }}
       >
@@ -72,7 +71,7 @@ const MainLayout = () => {
             fontWeight: "bold",
             fontSize: "18px",
             textDecoration: "none",
-            color: "black",
+            color: "white",
             borderBottom: "1px solid #ccc",
           }}
         >
@@ -91,6 +90,7 @@ const MainLayout = () => {
                 justifyContent: "flex-start",
                 width: "auto",
                 borderBottom: "1px solid #ccc",
+                
               }}
             >
               {/* Menu Principal - CENTRO */}
@@ -115,6 +115,7 @@ const MainLayout = () => {
               type="text"
               icon={<MenuOutlined />}
               onClick={() => setDrawerVisible(true)}
+              style={{color: "white"}}
             />
           </Space>
         )}
@@ -125,11 +126,14 @@ const MainLayout = () => {
         title="Menu"
         placement="right"
         onClose={() => setDrawerVisible(false)}
+        style={{backgroundColor: "#1d3973", color: "white"}}
         open={drawerVisible}
       >
         <Menu
           mode="vertical"
           items={mainMenuItems}
+          style={{backgroundColor: "#1d3973", color: "white"}}
+          
           onClick={() => setDrawerVisible(false)} // Fecha drawer ao clicar
         />
       </Drawer>
@@ -145,35 +149,10 @@ const MainLayout = () => {
         <Outlet />
       </Content>
 
-      <Footer className="bg-gray-800 py-8 px-4 text-white">
+      <Footer className="bg-sky-800 py-8 px-4 text-white" style={{backgroundColor: "#1d3973", color: "white"}}>
         <div className="max-w-6xl mx-auto">
-          {/* Links de Navegação */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-6">
-            <Link
-              to="/privacy"
-              className="hover:text-green-400 transition-colors duration-200"
-            >
-              Política de Privacidade
-            </Link>
-            <Link
-              to="/terms"
-              className="hover:text-green-400 transition-colors duration-200"
-            >
-              Termos de Serviço
-            </Link>
-            <Link
-              to="/contact"
-              className="hover:text-green-400 transition-colors duration-200"
-            >
-              Contato
-            </Link>
-          </div>
-
-          {/* Separador */}
-          <div className="border-t border-gray-600 my-6 w-full max-w-xs mx-auto"></div>
-
           {/* Informações da Empresa */}
-          <div className="text-center text-gray-300">
+          <div className="text-center">
             <p className="mb-2">
               71080-020 | CNPJ: 74.707.730/0001-63 • Ceilândia, Brasília-DF
             </p>

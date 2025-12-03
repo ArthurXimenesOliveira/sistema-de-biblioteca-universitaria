@@ -110,14 +110,14 @@ function Relatorios() {
   return (
     <div className="max-w-full bg-white p-6 rounded-lg shadow-md">
       <div className="flex flex-row justify-between p-4">
-        <p className="text-lg">Relatórios</p>
+        <p className="text-lg font-bold">Relatórios</p>
         <Button className="self-end" onClick={novoEmprestimo}>
           Novo empréstimo
         </Button>
       </div>
-      <div className="border mt-4 rounded-lg shadow-md flex flex-col items-center">
+      <div className="mt-4rounded-lg shadow-md flex flex-col items-center">
         <div className="w-full bg-gray-200">
-          <p className="text-lg p-4">Empréstimos por aluno</p>
+          <p className="text-lg p-4 font-bold">Empréstimos por aluno</p>
         </div>
         <Caixa
           tipo={4}
@@ -130,7 +130,7 @@ function Relatorios() {
           <p className="p-4 text-center">Nenhum aluno cadastrado.</p>
         )}
         {alunos.length > 0 && (
-          <div className="container border border-gray-300 rounded-lg m-4 w-full">
+          <div className="container rounded-lg m-4 w-full">
             {alunos.map((aluno) => {
               // Filtrar empréstimos do aluno atual
               const emprestimosAluno = emprestimos.filter(
@@ -138,7 +138,7 @@ function Relatorios() {
               );
 
               return (
-                <div key={aluno.id} className="border-b p-4">
+                <div key={aluno.id} className="border-b border-gray-300 p-4">
                   <div className="flex justify-between">
                     <p className="font-semibold">{aluno.nome}</p>
                     <p>Total de empréstimos: {emprestimosAluno.length}</p>
@@ -156,12 +156,6 @@ function Relatorios() {
                         rowKey="id"
                         pagination={false}
                         size="small"
-                        onRow={(record) => ({
-                          onClick: () => {
-                            showModal(record);
-                          },
-                          style: { cursor: "pointer" },
-                        })}
                       />
                     )}
                   </div>

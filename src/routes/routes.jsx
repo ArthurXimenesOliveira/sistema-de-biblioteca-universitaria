@@ -3,7 +3,8 @@ import MainLayout from '../components/MainLayout';
 import Livros from '../pages/Livros';
 import Autores from '../pages/Autores';
 import Alunos from '../pages/Alunos';
-import Relatorios from '../pages/Relatorios';
+import Emprestimo from '../pages/Emprestimo';
+import Relatorios from '../pages/Relatorio';
 
 
 function Rotas(){
@@ -13,8 +14,9 @@ function Rotas(){
                 <Route index element={<Navigate to="/livros" />} />
                 <Route path='livros' element={<Livros/>} />
                 <Route path='autores' element={<Autores/>} />
-                <Route path='relatorios' element={<Relatorios/>} />
+                <Route path='emprestimo' element={<Emprestimo/>} />
                 <Route path='alunos' element={<Alunos/>} />
+                <Route path='relatorios' element={<Relatorios/>} />
             </Route>
         </Routes>
     )

@@ -7,10 +7,9 @@ import {
   ReadOutlined,
   TeamOutlined,
   BarChartOutlined,
-  UserOutlined
+  UserOutlined,
+  SwapOutlined
 } from "@ant-design/icons";
-
-
 const { Header, Footer, Content } = Layout;
 
 const MainLayout = () => {
@@ -45,8 +44,14 @@ const MainLayout = () => {
     },
     {
       key: "4",
-      label: <Link to="/relatorios" style={{ color: "white" }}> <BarChartOutlined /> Relatórios</Link>,
+      label: <Link to="/emprestimo" style={{ color: "white" }}> <SwapOutlined /> Empréstimo</Link>,
     },
+    {
+      key: "5",
+      label: <Link to="/relatorios" style={{color: "white"}}><BarChartOutlined />Relatório</Link> 
+    }
+    
+
   ];
 
 

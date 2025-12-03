@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import AlunoDAO from "../daos/AlunosDAO.mjs";
 import Caixa from "../components/Caixa.jsx";
 
-function Relatorios() {
+function Emprestimo() {
   const [emprestimos, setEmprestimos] = useState([]);
   const [alunos, setAlunos] = useState([]);
   const [livros, setLivros] = useState([]);
@@ -110,7 +110,7 @@ function Relatorios() {
   return (
     <div className="max-w-full bg-white p-6 rounded-lg shadow-md">
       <div className="flex flex-row justify-between p-4">
-        <p className="text-lg font-bold">Relatórios</p>
+        <p className="text-lg font-bold">Empréstimo</p>
         <Button className="self-end" onClick={novoEmprestimo}>
           Novo empréstimo
         </Button>
@@ -169,4 +169,4 @@ function Relatorios() {
   );
 }
 
-export default Relatorios;
+export default Emprestimo;

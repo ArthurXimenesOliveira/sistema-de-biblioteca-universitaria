@@ -40,7 +40,7 @@ const MainLayout = () => {
     },
     {
       key: "3",
-      label: <Link to="/alunos">Alunos</Link>,
+      label: <Link to="/alunos"><UserOutlined />Alunos</Link>,
     },
     {
       key: "4",

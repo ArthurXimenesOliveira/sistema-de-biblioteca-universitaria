@@ -4,7 +4,7 @@ import Rotas from "./routes/routes";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/sistema-de-biblioteca-universitaria">
       <Rotas />
     </Router>
   );

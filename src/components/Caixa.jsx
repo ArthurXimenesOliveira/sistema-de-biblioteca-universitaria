@@ -19,6 +19,50 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
   const [alunos, setAlunos] = React.useState([]);
   const [livros, setLivros] = React.useState([]);
 
+  // Função de máscara para telefone
+  const aplicarMascaraTelefone = (value) => {
+    if (!value) return "";
+    
+    // Remove tudo que não é número
+    const apenasNumeros = value.replace(/\D/g, "");
+    
+    // Aplica a máscara baseada no tamanho
+    if (apenasNumeros.length <= 10) {
+      // Formato: (00) 0000-0000
+      return apenasNumeros
+        .replace(/(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{4})(\d)/, "$1-$2")
+        .replace(/(-\d{4})\d+?$/, "$1");
+    } else {
+      // Formato: (00) 00000-0000
+      return apenasNumeros
+        .replace(/(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{5})(\d)/, "$1-$2")
+        .replace(/(-\d{4})\d+?$/, "$1");
+    }
+  };
+
+  // Função de máscara para ano (limita a 4 dígitos)
+  const aplicarMascaraAno = (value) => {
+    if (!value) return "";
+    
+    // Remove tudo que não é número e limita a 4 dígitos
+    const apenasNumeros = value.replace(/\D/g, "").slice(0, 4);
+    return apenasNumeros;
+  };
+
+  // Handler para formatar telefone enquanto digita
+  const handleTelefoneChange = (e) => {
+    const valorFormatado = aplicarMascaraTelefone(e.target.value);
+    form.setFieldsValue({ telefone: valorFormatado });
+  };
+
+  // Handler para formatar ano enquanto digita
+  const handleAnoChange = (e) => {
+    const valorFormatado = aplicarMascaraAno(e.target.value);
+    form.setFieldsValue({ ano: valorFormatado });
+  };
+
   async function buscarAlunos() {
     const alunos = await new AlunosDAO().carregarAlunos();
     return alunos || [];
@@ -62,11 +106,13 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
         autorId: dados.autorId,
       });
     } else if (dados && tipo === 3) {
+      // Aplica a máscara no telefone ao preencher os dados
+      const telefoneFormatado = dados.telefone ? aplicarMascaraTelefone(dados.telefone) : "";
       form.setFieldsValue({
         nomeAluno: dados.nome,
         curso: dados.curso,
         email: dados.email,
-        telefone: dados.telefone,
+        telefone: telefoneFormatado,
       });
     } else {
       // Limpar formulário quando não há dados (modo criação)
@@ -102,7 +148,12 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
   function editarAluno(values) {
     if (!dados) return;
     const alunosDAO = new AlunosDAO();
-    alunosDAO.atualizarAluno(dados.id, values).then((ok) => {
+    // Remove a máscara do telefone antes de salvar
+    const dadosParaSalvar = {
+      ...values,
+      telefone: values.telefone ? values.telefone.replace(/\D/g, "") : ""
+    };
+    alunosDAO.atualizarAluno(dados.id, dadosParaSalvar).then((ok) => {
       if (!ok) console.error("Falha ao atualizar aluno");
     });
   }
@@ -158,14 +209,22 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
       // ALUNO (tipo 3)
       if (tipo === 3) {
         if (dados) {
-          editarAluno(values);
+          // Remove a máscara do telefone antes de editar
+          const valoresEditados = {
+            ...values,
+            telefone: values.telefone ? values.telefone.replace(/\D/g, "") : ""
+          };
+          editarAluno(valoresEditados);
         } else {
           const novoAluno = new Aluno();
+          // Remove a máscara do telefone antes de salvar
+          const telefoneLimpo = values.telefone ? values.telefone.replace(/\D/g, "") : "";
+          
           // campos do formulário de aluno: nomeAluno, curso, email, telefone
           novoAluno.setNome(values.nomeAluno);
           if (values.curso) novoAluno.setCurso(values.curso);
           if (values.email) novoAluno.setEmail(values.email);
-          if (values.telefone) novoAluno.setTelefone(values.telefone);
+          if (telefoneLimpo) novoAluno.setTelefone(telefoneLimpo);
 
           const alunosDAO = new AlunosDAO();
           const resposta = await alunosDAO.salvarAluno(novoAluno);
@@ -288,9 +347,18 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
                 required: true,
                 message: "Por favor, insira o ano de publicação!",
               },
+              {
+                pattern: /^\d{4}$/,
+                message: "Por favor, insira um ano válido (4 dígitos)!",
+              },
             ]}
           >
-            <Input type="number" placeholder="Ex: 2020" />
+            <Input 
+              type="text" 
+              placeholder="Ex: 2020" 
+              onChange={handleAnoChange}
+              maxLength={4}
+            />
           </Form.Item>
 
           <Form.Item
@@ -381,8 +449,21 @@ function Caixa({ isModalOpen, handleOk, handleCancel, tipo, dados }) {
             <Input placeholder="exemplo@email.com" />
           </Form.Item>
 
-          <Form.Item label="Telefone" name="telefone">
-            <Input placeholder="(00) 00000-0000" />
+          <Form.Item 
+            label="Telefone" 
+            name="telefone"
+            rules={[
+              {
+                pattern: /^\(\d{2}\) \d{4,5}-\d{4}$/,
+                message: "Por favor, insira um telefone válido!",
+              },
+            ]}
+          >
+            <Input 
+              placeholder="(00) 00000-0000" 
+              onChange={handleTelefoneChange}
+              maxLength={15}
+            />
           </Form.Item>
         </Form>
       )}

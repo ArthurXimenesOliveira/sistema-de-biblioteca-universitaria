@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { PlusOutlined } from '@ant-design/icons';
-import Botao from './Button';
+import { PlusOutlined } from "@ant-design/icons";
+import Botao from "./Button";
 import { Link, Outlet } from "react-router-dom";
 import { Layout, Menu, Drawer, Button, Space, Row, Col } from "antd";
 import {
@@ -9,7 +9,7 @@ import {
   TeamOutlined,
   BarChartOutlined,
   UserOutlined,
-  SwapOutlined
+  SwapOutlined,
 } from "@ant-design/icons";
 const { Header, Footer, Content } = Layout;
 
@@ -28,33 +28,53 @@ const MainLayout = () => {
   }, []);
   const iconHeaderStyle = { fontSize: "2rem", marginRight: "8px" };
 
-
   // Menu principal (Navegação)
   const mainMenuItems = [
     {
       key: "1",
-      label: <Link to="/livros" style={{ color: "white" }} ><ReadOutlined /> Livros</Link>,
+      label: (
+        <Link to="/livros" style={{ color: "white" }}>
+          <ReadOutlined /> Livros
+        </Link>
+      ),
     },
     {
       key: "2",
-      label: <Link to="/autores" style={{ color: "white" }}> <TeamOutlined /> Autores</Link>,
+      label: (
+        <Link to="/autores" style={{ color: "white" }}>
+          {" "}
+          <TeamOutlined /> Autores
+        </Link>
+      ),
     },
     {
       key: "3",
-      label: <Link to="/alunos" style={{ color: "white" }}><UserOutlined />Alunos</Link>,
+      label: (
+        <Link to="/alunos" style={{ color: "white" }}>
+          <UserOutlined />
+          Alunos
+        </Link>
+      ),
     },
     {
       key: "4",
-      label: <Link to="/emprestimo" style={{ color: "white" }}> <SwapOutlined /> Empréstimo</Link>,
+      label: (
+        <Link to="/emprestimo" style={{ color: "white" }}>
+          {" "}
+          <SwapOutlined /> Empréstimo
+        </Link>
+      ),
     },
     {
       key: "5",
-      label: <Link to="/relatorios" style={{color: "white"}}><BarChartOutlined />Relatório</Link> 
-    }
-    
-
+      label: (
+        <Link to="/relatorios" style={{ color: "white" }}>
+          <BarChartOutlined />
+          Relatório
+        </Link>
+      ),
+    },
   ];
-
 
   return (
     <Layout style={{ minHeight: "100vh", overflowX: "hidden", color: "white" }}>
@@ -97,7 +117,6 @@ const MainLayout = () => {
                 justifyContent: "flex-start",
                 width: "auto",
                 borderBottom: "1px solid #ccc",
-                
               }}
             >
               {/* Menu Principal - CENTRO */}
@@ -116,13 +135,18 @@ const MainLayout = () => {
 
         {/* LAYOUT MOBILE */}
         {isMobile && (
-          <Space>
-            {/* Botão do Menu Hamburguer */}
+          <Space
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              width: "100%",
+            }}
+          >
             <Button
               type="text"
               icon={<MenuOutlined />}
               onClick={() => setDrawerVisible(true)}
-              style={{color: "white"}}
+              style={{ color: "white" }}
             />
           </Space>
         )}
@@ -133,14 +157,18 @@ const MainLayout = () => {
         title="Menu"
         placement="right"
         onClose={() => setDrawerVisible(false)}
-        style={{backgroundColor: "#1d3973", color: "white"}}
+        style={{
+          backgroundColor: "#1d3973",
+          color: "white",
+          border: "1px solid black",
+        }}
         open={drawerVisible}
       >
         <Menu
+          theme="dark"
           mode="vertical"
           items={mainMenuItems}
-          style={{backgroundColor: "#1d3973", color: "white"}}
-          
+          style={{ backgroundColor: "#1d3973", color: "inherit" }}
           onClick={() => setDrawerVisible(false)} // Fecha drawer ao clicar
         />
       </Drawer>
@@ -152,11 +180,13 @@ const MainLayout = () => {
           border: "1px solid #ccc",
         }}
       >
-
         <Outlet />
       </Content>
 
-      <Footer className="bg-sky-800 py-8 px-4 text-white" style={{backgroundColor: "#1d3973", color: "white"}}>
+      <Footer
+        className="bg-sky-800 py-8 px-4 text-white"
+        style={{ backgroundColor: "#1d3973", color: "white" }}
+      >
         <div className="max-w-6xl mx-auto">
           {/* Informações da Empresa */}
           <div className="text-center">
@@ -164,7 +194,8 @@ const MainLayout = () => {
               71080-020 | CNPJ: 74.707.730/0001-63 • Ceilândia, Brasília-DF
             </p>
             <p className="text-sm">
-              Sistema de Biblioteca Universitária© {new Date().getFullYear()} • Created by IFB Team
+              Sistema de Biblioteca Universitária© {new Date().getFullYear()} •
+              Created by IFB Team
             </p>
           </div>
         </div>

@@ -1,14 +1,9 @@
-import { Table, Button, Modal, Popconfirm, message, Space } from "antd";
+import { Table, Button, Modal, Popconfirm, message, Space, Grid } from "antd";
 import InnerLayout from "../components/InnerLayout";
 import LivrosDAO from "../daos/LivrosDAO.mjs";
 import AutoresDAO from "../daos/AutoresDAO.mjs";
 import { useEffect, useState, useCallback } from "react";
-// 1. IMPORTAR o ícone PlusOutlined aqui (já estava correto)
-import {
-  EditOutlined,
-  DeleteOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import Caixa from "../components/Caixa.jsx";
 
 export default function Livros() {
@@ -18,6 +13,8 @@ export default function Livros() {
   const [livroSelecionado, setLivroSelecionado] = useState(null);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { useBreakpoint } = Grid; //ANTD disponibiliza o hook useBreakpoint para detectar breakpoints
+  const screens = useBreakpoint();
 
   // Carregar autores para exibir o nome no lugar do autorId
   const carregarAutores = useCallback(async () => {
@@ -114,12 +111,14 @@ export default function Livros() {
       title: "Ano",
       dataIndex: "ano",
       key: "ano",
+      responsive: ["md"],
     },
     {
       title: "ISBN",
       dataIndex: "isbn",
       key: "isbn",
       render: (isbn) => <span>{isbn || "-"}</span>,
+      responsive: ["md"],
     },
     {
       title: "Categoria",
@@ -131,14 +130,16 @@ export default function Livros() {
       dataIndex: "autorId",
       key: "autorId",
       render: (autorId) => autoresMap[autorId] || "Autor não encontrado",
+      responsive: ["md"],
     },
+
     {
       title: "Ações",
       key: "acoes",
       render: (_, record) => (
-        <Space>
+        <Space orientation={screens.xs ? "vertical" : "horizontal"}>
           <Button
-            type="link"
+            type="primary"
             icon={<EditOutlined />}
             onClick={(e) => handleEditar(record, e)}
           >
@@ -153,7 +154,7 @@ export default function Livros() {
             cancelText="Não"
           >
             <Button
-              type="link"
+              type="primary"
               danger
               icon={<DeleteOutlined />}
               onClick={(e) => e.stopPropagation()}
@@ -171,15 +172,14 @@ export default function Livros() {
       type="primary"
       icon={<PlusOutlined />}
       style={{
-        // ALTERAÇÃO: Fundo preto e texto/ícone branco
-        backgroundColor: 'black',
-        color: 'white', 
+        backgroundColor: "black",
+        color: "white",
         borderRadius: "5px",
         padding: "10px 20px",
       }}
       onClick={() => showModal()}
     >
-      Novo Livro
+     {screens.xs ? "Novo" : "Novo Livro"}
     </Button>
   );
 
@@ -191,6 +191,16 @@ export default function Livros() {
         locale={{ emptyText: "Nenhum livro cadastrado" }}
         rowKey="id"
         loading={loading}
+        pagination={{
+          pageSize: screens.xs ? 5 : 10, // Menos itens por página em telas pequenas
+          showSizeChanger: !screens.xs && !screens.sm, // Sem opção de mudar tamanho em xs e sm
+          showQuickJumper: !screens.xs, // Sem quick jumper em xs
+          size: screens.xs ? "small" : "default", //tamanho da paginação
+          showTotal: (
+            total,
+            range //total = número total de itens na lista || range = array com o intervalo atual [início, fim]. Eles recebem esses parâmetros automaticamente
+          ) => `${range[0]}-${range[1]} de ${total} livros`,
+        }}
         onRow={(record) => ({
           onClick: () => {
             showModal(record);
@@ -208,6 +218,3 @@ export default function Livros() {
     </InnerLayout>
   );
 }
-
-
-

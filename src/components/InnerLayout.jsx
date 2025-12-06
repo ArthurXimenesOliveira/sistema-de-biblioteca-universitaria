@@ -1,15 +1,7 @@
 import React from "react";
-import { PlusOutlined } from '@ant-design/icons';
-import { Layout, Card, Button } from "antd";
+import { Layout, Card} from "antd";
 
 const { Header, Content } = Layout;
-
-/**
- * InnerLayout Reutilizável
- * @param {string} title - Título do header
- * @param {React.ReactNode} children - Conteúdo interno (ex: tabelas)
- * @param {React.ReactNode} extra - Botão ou ação extra
- */
 export default function InnerLayout({ title, children, extra }) {
   return (
     <Layout style={{ background: "transparent" }}>

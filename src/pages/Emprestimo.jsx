@@ -1,5 +1,6 @@
-import { Button, Table, Tag, Space } from "antd"; // Adicione Tag e Space
+import { Button, Table, Tag, Space, Grid } from "antd"; // Adicione Tag e Space
 import { useState, useEffect } from "react";
+import { PlusOutlined } from "@ant-design/icons";
 import AlunoDAO from "../daos/AlunosDAO.mjs";
 import Caixa from "../components/Caixa.jsx";
 
@@ -7,6 +8,8 @@ function Emprestimo() {
   const [emprestimos, setEmprestimos] = useState([]);
   const [alunos, setAlunos] = useState([]);
   const [livros, setLivros] = useState([]);
+  const { useBreakpoint } = Grid; //ANTD disponibiliza o hook useBreakpoint para detectar breakpoints
+  const screens = useBreakpoint();
 
   const [showModalDevolucao, setShowModalDevolucao] = useState(false);
 
@@ -91,7 +94,7 @@ function Emprestimo() {
       title: "Ações",
       key: "acoes",
       render: (_, record) => (
-        <Space>
+        <Space orientation={screens.xs ? "vertical" : "horizontal"}>
           <Button
             type="link"
             onClick={(e) => handleDevolucao(record.id, e)}
@@ -106,13 +109,26 @@ function Emprestimo() {
   function novoEmprestimo() {
     showModal();
   }
+  const CustomButton = () => (
+    <Button
+      type="primary"
+      icon={<PlusOutlined />}
+      style={{
+        backgroundColor: "black",
+        color: "white",
+        borderRadius: "5px",
+      }}
+      onClick={() => showModal()}
+      size={screens.xs ? "small" : "middle"}
+    >
+      {screens.xs ? "Novo" : "Novo Empréstimo"}
+    </Button>
+  );
 
   return (
     <div className="max-w-full bg-white p-6 rounded-lg shadow-md">
       <div className="flex flex-row justify-end p-4">
-        <Button className="self-end" onClick={novoEmprestimo}>
-          Novo empréstimo
-        </Button>
+        {<CustomButton/>}
       </div>
       <div className="mt-4rounded-lg shadow-md flex flex-col items-center">
         <div className="w-full bg-gray-200">
@@ -154,7 +170,10 @@ function Emprestimo() {
                         locale={{ emptyText: "Nenhum livro emprestado" }}
                         rowKey="id"
                         pagination={false}
-                        size="small"
+                        size={screens.xs ? "small" : "default"}
+                        scroll={
+                          screens.xs ? { x: 500 } : screens.sm ? { x: 600 } : {}
+                        }
                       />
                     )}
                   </div>

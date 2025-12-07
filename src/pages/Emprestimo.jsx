@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import AlunoDAO from "../daos/AlunosDAO.mjs";
 import Caixa from "../components/Caixa.jsx";
-
+/*Atualizado*/
 function Emprestimo() {
   const [emprestimos, setEmprestimos] = useState([]);
   const [alunos, setAlunos] = useState([]);

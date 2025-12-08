@@ -11,11 +11,13 @@ import 'dayjs/locale/pt-br';
 function App() {
   return (
     <ConfigProvider locale={ptBR}>
-      <Router basename="/sistema-de-biblioteca-universitaria">
-        <Rotas />
-      </Router>
+      <BrowserRouter basename="/sistema-de-biblioteca-universitaria">
+      <Rotas />
+    </BrowserRouter>
     </ConfigProvider>
   );
 }
 
 export default App;
+
+

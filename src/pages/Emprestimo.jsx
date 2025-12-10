@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import AlunoDAO from "../daos/AlunosDAO.mjs";
 import Caixa from "../components/Caixa.jsx";
-/*Atualizado*/
+
 function Emprestimo() {
   const [emprestimos, setEmprestimos] = useState([]);
   const [alunos, setAlunos] = useState([]);
@@ -61,10 +61,7 @@ function Emprestimo() {
 
   function filtrarLivrosPorIds(ids) {
     if (!ids) return "N/A";
-    return (
-      livros.find((livro) => livro.id === ids)?.titulo ??
-      "N/A"
-    );
+    return livros.find((livro) => livro.id === ids)?.titulo ?? "N/A";
   }
 
   function calcularDataPrevista(data) {
@@ -137,14 +134,11 @@ function Emprestimo() {
 
   return (
     <div className="max-w-full bg-white p-6 rounded-lg shadow-md">
-      
-      {/* 🔍 Barra de pesquisa estilizada + botão de limpar */}
       <div className="flex flex-row justify-between p-4">
         <div
-          className="flex items-center gap-3 w-1/2 bg-gray-100 border border-gray-300 
-          rounded-full px-4 py-2 shadow-sm focus-within:shadow-md transition"
+          className="flex items-center gap-3 w-1/2 bg-gray-100 border 
+          border-gray-300 rounded-full px-4 py-2 shadow-sm"
         >
-          {/* Ícone */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
@@ -158,7 +152,6 @@ function Emprestimo() {
             />
           </svg>
 
-          {/* Campo */}
           <input
             type="text"
             placeholder="Buscar aluno, livro ou status..."
@@ -167,11 +160,10 @@ function Emprestimo() {
             onChange={(e) => setFiltro(e.target.value.toLowerCase())}
           />
 
-          {/* Botão limpar */}
           {filtro.length > 0 && (
             <button
               onClick={() => setFiltro("")}
-              className="text-gray-500 hover:text-gray-700 transition"
+              className="text-gray-500 hover:text-gray-700"
             >
               ✕
             </button>
@@ -200,12 +192,16 @@ function Emprestimo() {
         {alunos.length > 0 && (
           <div className="container rounded-lg m-4 w-full">
             {alunos.map((aluno) => {
-              
               const nomeBate = aluno.nome.toLowerCase().includes(filtro);
 
               let emprestimosAluno = emprestimos.filter(
                 (e) => e.idAluno === aluno.id
               );
+
+              // ⛔ CORREÇÃO PRINCIPAL: esconder alunos SEM empréstimo
+              if (emprestimosAluno.length === 0) {
+                return null;
+              }
 
               const emprestimosFiltrados = emprestimosAluno.filter((emp) => {
                 const livroNome = filtrarLivrosPorIds(emp.idLivro).toLowerCase();
@@ -221,15 +217,10 @@ function Emprestimo() {
                 );
               });
 
-              // Regra:
-              // Se o nome do aluno combinar → mostrar empréstimos completos
-              // Se não combinar → mostrar apenas empréstimos filtrados
               const finalList = nomeBate ? emprestimosAluno : emprestimosFiltrados;
 
-              // Se pesquisa não bate no aluno e nenhum empréstimo → não exibe o aluno
-              if (!nomeBate && finalList.length === 0) {
-                return null;
-              }
+              // Se filtro não bate em nada → oculta
+              if (!nomeBate && finalList.length === 0) return null;
 
               return (
                 <div key={aluno.id} className="border-b border-gray-300 p-4">

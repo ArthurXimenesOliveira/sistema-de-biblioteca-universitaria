@@ -197,10 +197,8 @@ function Emprestimo() {
               let emprestimosAluno = emprestimos.filter(
                 (e) => e.idAluno === aluno.id
               );
-
-              // ⛔ CORREÇÃO PRINCIPAL: esconder alunos SEM empréstimo
               if (emprestimosAluno.length === 0) {
-                return null;
+                return <p className="p-4 text-center">Nenhum empréstimo ativo.</p>;
               }
 
               const emprestimosFiltrados = emprestimosAluno.filter((emp) => {

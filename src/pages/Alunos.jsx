@@ -232,15 +232,6 @@ export default function Alunos() {
           showTotal: (total, range) => //total = número total de itens na lista || range = array com o intervalo atual [início, fim]. Eles recebem esses parâmetros automaticamente
             `${range[0]}-${range[1]} de ${total} alunos`,
         }} 
-        onRow={(record) => ({
-          onClick: () => {
-            showModal(record);
-          },
-          style: {
-            cursor: "pointer",
-            transition: "all 0.3s",
-          },
-        })}
         size={screens.xs ? "small" : screens.sm ? "middle" : "default"}
         rowClassName={() => "hover:bg-gray-50"}
       />

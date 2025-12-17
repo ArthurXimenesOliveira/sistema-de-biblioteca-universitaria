@@ -132,6 +132,14 @@ function Emprestimo() {
     </Button>
   );
 
+  // Função para verificar se há empréstimos ativos
+  const possuiEmprestimosAtivos = () => {
+    return emprestimos.some(emp => emp.pendente === true);
+  };
+
+  // Verifica se há alunos cadastrados
+  const hasAlunos = alunos.length > 0;
+
   return (
     <div className="max-w-full bg-white p-6 rounded-lg shadow-md">
       <div className="flex flex-row justify-between p-4">
@@ -185,11 +193,11 @@ function Emprestimo() {
           handleCancel={handleCancel}
         />
 
-        {alunos.length === 0 && (
+        {!hasAlunos ? (
           <p className="p-4 text-center">Nenhum aluno cadastrado.</p>
-        )}
-
-        {alunos.length > 0 && (
+        ) : !possuiEmprestimosAtivos() ? (
+          <p className="p-4 text-center">Nenhum empréstimo ativo.</p>
+        ) : (
           <div className="container rounded-lg m-4 w-full">
             {alunos.map((aluno) => {
               const nomeBate = aluno.nome.toLowerCase().includes(filtro);
@@ -197,9 +205,6 @@ function Emprestimo() {
               let emprestimosAluno = emprestimos.filter(
                 (e) => e.idAluno === aluno.id
               );
-              if (emprestimosAluno.length === 0) {
-                return <p className="p-4 text-center">Nenhum empréstimo ativo.</p>;
-              }
 
               const emprestimosFiltrados = emprestimosAluno.filter((emp) => {
                 const livroNome = filtrarLivrosPorIds(emp.idLivro).toLowerCase();
@@ -220,6 +225,9 @@ function Emprestimo() {
               // Se filtro não bate em nada → oculta
               if (!nomeBate && finalList.length === 0) return null;
 
+              // Se o aluno não tem empréstimos, não mostra nada
+              if (finalList.length === 0) return null;
+
               return (
                 <div key={aluno.id} className="border-b border-gray-300 p-4">
                   <div className="flex justify-between">
@@ -228,23 +236,17 @@ function Emprestimo() {
                   </div>
 
                   <div className="mt-2">
-                    {finalList.length === 0 ? (
-                      <p className="text-center text-gray-500 p-4">
-                        Nenhum empréstimo encontrado para este aluno.
-                      </p>
-                    ) : (
-                      <Table
-                        columns={columns}
-                        dataSource={finalList}
-                        locale={{ emptyText: "Nenhum livro emprestado" }}
-                        rowKey="id"
-                        pagination={false}
-                        size={screens.xs ? "small" : "default"}
-                        scroll={
-                          screens.xs ? { x: 500 } : screens.sm ? { x: 600 } : {}
-                        }
-                      />
-                    )}
+                    <Table
+                      columns={columns}
+                      dataSource={finalList}
+                      locale={{ emptyText: "Nenhum livro emprestado" }}
+                      rowKey="id"
+                      pagination={false}
+                      size={screens.xs ? "small" : "default"}
+                      scroll={
+                        screens.xs ? { x: 500 } : screens.sm ? { x: 600 } : {}
+                      }
+                    />
                   </div>
                 </div>
               );

@@ -9,6 +9,7 @@ export default class Livros {
     // --- LIVRO ID ---
     setLivroId(id) {
       this.#livroId = id;
+      return true;
     }
     getLivroId() {
       return this.#livroId;
@@ -17,6 +18,7 @@ export default class Livros {
     // --- TÍTULO ---
     setTitulo(titulo) {
       this.#titulo = titulo;
+      return true;
     }
     getTitulo() {
       return this.#titulo;
@@ -25,6 +27,7 @@ export default class Livros {
     // --- ANO ---
     setAno(ano) {
       this.#ano = ano;
+      return true;
     }
     getAno() {
       return this.#ano;
@@ -33,6 +36,7 @@ export default class Livros {
     // --- ISBN ---
     setISBN(isbn) {
       this.#isbn = isbn;
+      return true;
     }
     getISBN() {
       return this.#isbn;
@@ -41,6 +45,7 @@ export default class Livros {
     // --- CATEGORIA ---
     setCategoria(categoria) {
       this.#categoria = categoria;
+      return true;
     }
     getCategoria() {
       return this.#categoria;
@@ -49,6 +54,7 @@ export default class Livros {
     // --- AUTOR (FK) ---
     setAutorId(autorId) {
       this.#autorId = autorId;
+      return true;
     }
     getAutorId() {
       return this.#autorId;

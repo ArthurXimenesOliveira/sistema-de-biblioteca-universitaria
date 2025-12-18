@@ -3,25 +3,27 @@ export default class Autores extends Pessoa {
   // Atributos
   #autorId;
   #biografia;
-  #ativo;
+  #nacionalidade;
 
   // Métodos
   setAutorId(id) {
     this.#autorId = id;
+    return true;
   }
   getAutorId() {
     return this.#autorId;
   }
   setBiografia(biografia) {
     this.#biografia = biografia;
+    return true;
   }
   getBiografia() {
     return this.#biografia;
   }
-  setAtivo(ativo) {
-    this.#ativo = ativo;
+  setNacionalidade(nacionalidade) {
+    this.#nacionalidade = nacionalidade;
   }
-  getAtivo() {
-    return this.#ativo;
+  getNacionalidade() {
+    return this.#nacionalidade;
   }
 }

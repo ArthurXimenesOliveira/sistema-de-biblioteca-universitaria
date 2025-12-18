@@ -6,6 +6,7 @@ export default class Emprestimo {
 
     setDataEmprestimo(dataEmprestimo) {
         this.#dataEmprestimo = dataEmprestimo;
+        return true;
     }
 
     getDataEmprestimo() {
@@ -14,6 +15,7 @@ export default class Emprestimo {
 
     setDataDevolucao(dataDevolucao) {
         this.#dataDevolucao = dataDevolucao;
+        return true;
     }
 
     getDataDevolucao() {
@@ -22,6 +24,7 @@ export default class Emprestimo {
 
     setIdAluno(idAluno) {
         this.#idAluno = idAluno;
+        return true;
     }
 
     getIdAluno() {
@@ -30,6 +33,7 @@ export default class Emprestimo {
 
     setIdLivro(idLivro) {
         this.#idLivro = idLivro;
+        return true;
     }
 
     getIdLivro() {

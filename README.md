@@ -126,12 +126,25 @@ As telas abaixo ilustram as principais funcionalidades do sistema.
 
 ---
 
+# 🧠 Modelagem dos Dados
+
+## 📌 Diagrama de Classes
+
+O diagrama de classes abaixo representa o modelo conceitual utilizado no projeto, servindo como base para o Backend/LocalStorage e para o consumo no FrontEnd.
+
+![Diagrama de Classes](./images/uml.png)
+
+O diagrama foi modelado utilizando **PlantUML**, conforme o arquivo `uml6.txt`.
+
+---
+
 ## 📁 Estrutura de Pastas
 
 ```txt
 projeto/
 ├── dist/
 ├── node_modules/
+├── images/
 ├── public/
 │   └── biblioteca.avif
 ├── src/
@@ -152,6 +165,7 @@ projeto/
 ├── package.json
 ├── README.md
 └── vite.config.js
+└── vite.config.vercel.js
 ```
 
 ---
@@ -180,7 +194,7 @@ Este projeto permite praticar:
 
 ## 👥 Autoria
 
-* **Autores:** Kauã Nunes, Arthur e Guilherme
+* **Autores:** Kauã Nunes, Arthur Ximenes e Guilherme Nantes
 * **Projeto:** Bolsa Futuro Digital (BFD)
 * **Área:** Desenvolvimento Frontend
 * **Instituição:** Instituto Federal de Brasília (IFB)
